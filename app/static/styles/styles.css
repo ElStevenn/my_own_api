@@ -1,0 +1,139 @@
+.fancy-link {
+  color: #1e40af;
+  transition: color 0.1s, background-color 0.1s;
+  background-color: #2563eb33;
+  text-decoration: none;
+  border-radius: 4px;
+  padding: 0.16em 0.3em;
+  margin: -0.2em 0;
+  line-height: 1.7;
+  white-space: nowrap;
+}
+
+.fancy-link:hover {
+  color: #2563eb;
+  background-color: #3b82f633;
+}
+
+.subtle-link {
+  color: currentColor;
+  transition: color 0.1s, background-color 0.1s;
+  text-decoration: none;
+  border-radius: 4px;
+  padding: 0.02em 0.2em 0.14em;
+  margin: -0.02em -0.2em -0.14em;
+}
+
+.subtle-link:hover {
+  color: currentColor;
+  background-color: #3b82f633;
+}
+
+/* Footer common */
+#ornaments {
+  line-height: 1.5rem;
+}
+
+.logo {
+  line-height: 0rem;
+}
+
+pre {
+  margin: 0;
+}
+
+.highlighter-rouge,
+figure {
+  padding: 0.2em;
+  margin: -0.2em 0;
+  border-radius: 3px;
+  background-color: #f5f5f5;
+}
+
+pre {
+  font-size: 0.85em;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #e5e5e5;
+    background-color: #050505;
+  }
+
+  .highlighter-rouge,
+  figure {
+    background-color: #050505;
+  }
+
+  footer {
+    background-color: #090909;
+  }
+
+  .fancy-link {
+    color: #7928CA  ;
+    background-color: #3b82f633;
+  }
+
+  .fancy-link:hover {
+    color: #93c5fd;
+    background-color: #91c3fd33;
+  }
+
+  .subtle-link {
+    color: currentColor;
+  }
+
+  .subtle-link:hover {
+    color: currentColor;
+    background-color: #91c3fd33;
+  }
+
+
+  a {
+  text-decoration: none;
+  }
+  /* a = <a>, so every <a> will have their underline decoration removed, very nice.*/
+}
+
+
+
+/* Translator styles here */
+
+
+.translator-container {
+  width: 80%;
+  max-width: 1200px;
+  padding: 20px;
+  border-radius: var(--border-radius);
+  background: var(--input-background-color);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.input-area, .output-area {
+  width: 48%;
+  height: 150px;
+  background-color: var(--input-background-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 10px;
+  margin: 10px 1%;
+  color: var(--text-color);
+  resize: none;
+}
+.button {
+  background-color: var(--button-background-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 10px 20px;
+  margin: 0 10px 10px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.button:hover {
+  background-color: var(--button-hover-color);
+}
+.char-counter {
+  text-align: right;
+  color: var(--counter-color);
+  font-size: 0.8em;
+}
