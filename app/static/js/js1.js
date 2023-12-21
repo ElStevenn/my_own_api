@@ -1,5 +1,2 @@
 
-
-function downloadPgpKey() {
-    
-}
+console.log("Hello world!");

@@ -7,72 +7,157 @@
     <link rel="stylesheet" href="/static/styles/styles.css">
     <link rel="stylesheet" href="/static/styles/new.css">
     <link rel="stylesheet" href="/static/styles/bio.css">
-    <link rel="stylesheet" type="text/css" href="./venroy.top_files/styles.css"> <!-- creoque estos son los estilos -->
+    <link rel="stylesheet" type="text/css" href="./venroy.top_files/styles.css"> <!-- i think these are the styles -->
     <link rel="icon" href="/static/icon.png" type="image/png">
-</head>
-<style>
-        .translator-container {
-            width: 80%;
-            max-width: 1200px;
-            padding: 20px;
-            border-radius: var(--border-radius);
-            background: var(--input-background-color);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-        .input-area, .output-area {
-            width: 48%;
-            height: 150px;
-            background-color: var(--input-background-color);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            padding: 10px;
-            margin: 10px 1%;
-            color: var(--text-color);
-            resize: none;
-        }
-        .button {
-            background-color: var(--button-background-color);
-            color: var(--text-color);
-            border: none;
-            border-radius: var(--border-radius);
-            padding: 10px 20px;
-            margin: 0 10px 10px 0;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .button:hover {
-            background-color: var(--button-hover-color);
-        }
-        .char-counter {
-            text-align: right;
-            color: var(--counter-color);
-            font-size: 0.8em;
-        }
+    
+    <script src="/file/js1.js"></script>
 
-        /* Responsive design adjustments */
-        /* ... */
+    <style>
+
+    body{
+        max-width: 1200px;
+    }    
+
+
+        .original-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    text-decoration: none;
+    color: #7928ca;
+    font-size: 18px;
+    border-radius: 2px;
+    width: auto;
+    margin: 5px;
+    padding: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 20px;
+    border: 1px solid #222222;
+    background-color: #111111;
+    }
+
+
+    .translator_body {
+    display: flex;
+    justify-content: space-between; 
+    }
+
+    .trans_buttons, .middle_buttons {
+        display: flex;
+        justify-content: center;
+        flex-grow: 1; 
+        
+    }
+
+    .button-image {
+    height: 16px; /* Adjust this value as needed */
+    width: auto; /* This will maintain the aspect ratio of the image */
+    }
+
+
+    .trans_inputs {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px; /* Adjust padding as needed */
+    }
+
+    .textarea-style {
+    flex: 1; 
+    margin: 0px;
+    padding: 10px; 
+    font-size: 18px; 
+    border: 1px solid #222222; 
+    border-radius: 1px;
+    background-color: #111111; 
+    color: #fff; 
+    resize: none;
+    overflow-y: hidden; /* Hide the scrollbar until it's needed */
+    min-height: 150px; /* Minimum height */
+    max-height: 300px; /* Maximum height before scrollbar shows */
+    line-height: 1.5; 
+}
+
+
+    /* Adjust for unique IDs if needed */
+    #myTextarea1, #myTextarea2 {
+        width: calc(50% - 10px);
+        overflow-y: auto; 
+        max-height: 1000px;
+    }
+
+        
     </style>
-<body>
-    <header>
-        <pre>&gt;   root@pauserver:~$ whoami | figlet -f custom-font <h1 style="font-size: 5px;">
-            ::::    ::::  :::::::::     :::::::::    :::      :::    :::  
-            +:+:+: :+:+:+ :+:    :+:    :+:    :+  : :+: :+:  :+:    :+: 
-            +:+ +:+:+ +:+ +:+    +:+    +:+    +: ++:+   +:+  +:+    +:+ 
-            +#+  +:+  +#+ +#++:++#:     +#++:++#+ +#++:++#++: +#+    +:+ 
-            +#+       +#+ +#+    +#+    +#+       +#+     +#+ +#+    +#+ 
-            #+#       #+# #+#    #+# #+ ##+#      #+#     #+# #+#    #+# 
-            ###       ### ###    ### ## ####      ###     ###  ########  
-</h1> </pre>   <nav>
-            <code> <a href="http://paumateu.com"> cd ..</a> </code>
-        </nav> 
-    </header>
+</head>
 
-    <code> 
-        <span style="color:#FF0000" ;="">root</span>@pauserver
-    </code>
-    <h2>Translator (ʘ‿ʘ) <span style="font-size: 7px;">add something here</span></h2>
+<body>
+    <div>
+            <header >
+                <pre>&gt;   root@pauserver:~$ whoami | figlet -f custom-font <h1 style="font-size: 5px;">
+                    ::::    ::::  :::::::::     :::::::::    :::      :::    :::  
+                    +:+:+: :+:+:+ :+:    :+:    :+:    :+  : :+: :+:  :+:    :+: 
+                    +:+ +:+:+ +:+ +:+    +:+    +:+    +: ++:+   +:+  +:+    +:+ 
+                    +#+  +:+  +#+ +#++:++#:     +#++:++#+ +#++:++#++: +#+    +:+ 
+                    +#+       +#+ +#+    +#+    +#+       +#+     +#+ +#+    +#+ 
+                    #+#       #+# #+#    #+# #+ ##+#      #+#     #+# #+#    #+# 
+                    ###       ### ###    ### ## ####      ###     ###  ########  
+        </h1> </pre>   <nav>
+                    <code> <a href="https://paumateu.com"> cd ..</a> </code>
+                </nav> 
+            </header>
+        </div>
+        <div class="mainPart">
+
+        
+        <code> 
+            <span style="color:#FF0000" ;="">root</span>@pauserver: python3 translator.py
+        </code>
+        <h2>Translator (ʘ‿ʘ) <span style="font-size: 7px;">do not try to translate the n-word ᕙ(`▿´)ᕗ </span></h2>
+        <br>
+        <b>Use the best translator ever seen! Using GPT 4 technology and built-in corrector!</b>
+        <br>
+        <br>
+    </div>
+    <!-- translator here -->
+    <div class="translator_body">
+        <div class="trans_buttons" id="left_trans_buttons">
+            <!--
+            <a href="#" class="original-button" id="left_but_1">English</a>
+            <a href="#" class="original-button" id="left_but_2">Spanish</a>
+            <a href="#" class="original-button" id="left_but_3">French</a>
+            -->
+        </div>
+        <div class="middle_buttons">
+            <a href="#" class="original-button" onclick="switch_translation()">
+                <img src="/file/icon_arrows.png" alt="Arrow Icon" class="button-image">
+            </a>
+        </div>
+        <div class="trans_buttons" id="right_trans_buttons">
+            <!--
+            <a href="#" class="original-button" id="right_but_1">Spanish</a>
+            <a href="#" class="original-button" id="right_but_2">English</a>
+            <a href="#" class="original-button" id="right_but_3">French</a>
+            -->
+        </div>
+    </div>
+    <div class="trans_inputs">
+        <textarea id="texto_to_translate_text_area" name="myTextarea1" placeholder="Enter text here" class="textarea-style" style="margin: 5px 5px 5px 0px;"></textarea>
+        <textarea id="text_translated_text_area" name="myTextarea2" placeholder="Translation" class="textarea-style" readonly style="margin: 5px 0px 5px 5px;"></textarea>
+    </div>
     <br>
-    <b>Feel free to use my own translator using GPT-4!</b>
+    <br>
+    <br>    
+    <b>Use this translator as an API</b>
+    <blockquote>
+        <b>Under construction</b>
+    </blockquote>
+    <p>Under construction</p>
+    <blockquote>
+        <b>Under construction</b>
+    </blockquote>
+    <p>Under construction</p>
+
 
    
 </body>

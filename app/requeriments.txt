@@ -1,5 +1,7 @@
 requests
-fastapi
+fastapi==0.70.1
 FastAPI-SQLAlchemy
 pandas
 numpy
+aiofiles
+openai==0.28

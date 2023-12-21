@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, WebSocket, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse, HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
-from api import schemas, email_sender
-from googletrans import Translator, LANGUAGES
+from starlette.websockets import WebSocketState
+from api import email_sender, openai_translator
 from pathlib import Path
 from pydantic import BaseModel
 import uvicorn
 import os
+
 
 app = FastAPI(
     debug=True
@@ -72,12 +73,6 @@ async def get_public_ssh_key():
         public_key = f.read()
     return PlainTextResponse(public_key)
 
-@app.get("/get_privatessh")
-async def get_ssh_key():
-    with open(Path("/files/mamadoKey.txt")) as f:
-        private_key = f.read()
-    return PlainTextResponse(private_key)
-
 @app.get("/cv")
 async def show_cv():
     file_path = os.path.join(os.path.dirname(__file__), "Pau_Mateu_Resume.pdf")
@@ -93,6 +88,17 @@ async def show_cv():
 async def download_pgp_key():
     file_path = os.path.join(os.path.dirname(__file__), "files", "mamadoKey.txt")
     return FileResponse(file_path)
+
+@app.get("/file/{filename}")
+async def get_file(filename: str):
+    try:
+        file_path = os.path.join(os.path.dirname(__file__), "files", filename)
+        if not os.path.exists(file_path):
+            return {"error": f"the filename {filename} doesn't exist"}
+        return FileResponse(file_path)
+    except Exception as e:
+        return {"error": f"An error occurred: {str(e)}"}
+
 
 @app.get("/send", response_class=HTMLResponse)
 async def send_email():
@@ -117,16 +123,38 @@ async def emailsender():
         html_content = file.read()
     return HTMLResponse(html_content)
 
+
+@app.websocket("/ws_endpoint_translate")
+async def translate_text(websocket: WebSocket):
+    await websocket.accept()
+    client_host = websocket.client.host
+    try:
+        while True:
+            data = await websocket.receive_json()
+            if 'text_to_translate' in data and 'origin_language' in data and 'language_to_translate' in data:
+                translated_text = await openai_translator.translate_text_with_gpt4(
+                    client_host,
+                    data['text_to_translate'],                    
+                    data['origin_language'], 
+                    data['language_to_translate'],                    
+                )
+                await websocket.send_json({"translated_text": translated_text})
+            else:
+                await websocket.send_json({"error": "Invalid data format"})
+    except Exception as e:
+        await websocket.send_json({"error": str(e)})
+    finally:
+        if websocket.application_state != WebSocketState.DISCONNECTED:
+            await websocket.close()
+
+
+
 # ----------------------------- Mini functions -----------------------------------------------------------------
-def translate(text, origin_language, target_language):
-    translator = Translator()
-    traduccion = translator.translate(text, src=origin_language, dest=target_language)
-    return traduccion.text
 
 
 if __name__ == "__main__":
     # uvicorn main:app --host 0.0.0.0 --port 80
-    
+    # PostgreSQL file conf -> /etc/postgresql/14/main/postgresql.conf      
     uvicorn.run(
         "main:app",
         host = "0.0.0.0", 

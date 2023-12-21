@@ -12,11 +12,11 @@ class UserCreate(UserBase):
 class UserLogin(UserBase):
     password: str
 
-class ModifyPassowrd():
+class ModifyPassowrd(BaseModel):
     password: str # Password that user wants to modify
 
 
-class EmailBasicStructure():
+class EmailBasicStructure(BaseModel):
     to: str
     subject: str
     text: str = None
