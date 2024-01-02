@@ -143,10 +143,34 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-function switch_languages(){
-    var new_text_to_translate = "";
-    var new_origint_text = "";
+function switch_languages() {
+
+    console.log(document.getElementById('text_translated_text_area')); // Should log the element or null
+    console.log(document.getElementById('original_text_area'));
+
+    let translated_text = document.getElementById('text_translated_text_area').textToTranslate; // Changed to 'value'
+    // let original_text = document.getElementById('original_text_area').value; // Changed to 'value'
+    let temp_var;
+
+    // Switch colors
+    setButtonStyle(`to_${origin_language}`, "#FF0000");
+    setButtonStyle(`to_${text_to_translate}`, "#7928CA");
+
+    setButtonStyle(`original_${text_to_translate}`, "#FF0000");
+    setButtonStyle(`original_${origin_language}`, "#7928CA");
+
+    // Switch variables
+    temp_var = text_to_translate;
+    text_to_translate = origin_language;
+    origin_language = temp_var;
+
+    // Swap the content of the text areas
+    document.getElementById('original_text_area').value = translated_text; // Changed to 'value'
+    document.getElementById('text_translated_text_area').value = ""; // Changed to 'value'
 }
+
+
+
 
 function left_button(language) {
     var element = document.getElementById(`original_${language}`);

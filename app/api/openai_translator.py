@@ -3,33 +3,53 @@ import openai
 from concurrent.futures import ThreadPoolExecutor
 from uuid import uuid4
 from .sql_app import crud, schemas
-import re
+import re, aiohttp
 
-api_key = "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"
+api_key = "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"
 
 
 async def remove_main_brackets(text):
     # Remove contents within round and square brackets including the brackets
     return re.sub(r'\[.*?\]|\(.*?\)', '', text)
 
+async def get_client_data(ip: str):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f"http://ip-api.com/json/{ip}?fields=status,message,country,region,regionName,city,district,zip,lat,lon,timezone,isp,org,as,mobile,query") as res:
+            result = await res.json()
+            return result.get('country', None), result.get('city', None), result.get('zip', None), result.get('mobile', None)
+
+
+
 async def store_data(client_ip, origin_language, language_to_translate, origin_text, translated_text):
     async for db in crud.get_db():
+        # Truncate data to fit into VARCHAR(20)
+        country, city, zipcode, mobile = await get_client_data(client_ip)
+        country = country[:20] if country else None
+        city = city[:20] if city else None
+        zip_code = zipcode[:20] if city else None
+        mobie = mobile if mobile else None
+
         # Create a new log item using the schema
         new_log = schemas.CreateItemLod(
             ip=client_ip, 
             origin_language=origin_language, 
             language_to_translate=language_to_translate,
             origin_text=origin_text, 
-            translated_text=translated_text
+            translated_text=translated_text,
+            client_country=country,
+            client_city=city,
+            client_zip_code=zip_code,
+            using_phone=mobie
         )
         
         # Create the log entry in the database
         await crud.create_log(db, new_log)
-        break  
+        break
+
     
 
 async def translate_text_with_gpt4(client_ip, text_to_translate, origin_language="English", language_to_translate="Spanish",):
-    openai.api_key = "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"
+    openai.api_key = "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"
     loop = asyncio.get_event_loop()
     with ThreadPoolExecutor() as pool:
         response = await loop.run_in_executor(

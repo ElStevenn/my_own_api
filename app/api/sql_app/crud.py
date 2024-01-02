@@ -1,9 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
+from sqlalchemy.future import select
 from . import models, schemas, database
-import asyncio
+from sqlalchemy.ext.asyncio import AsyncSession
 
-async def get_db():
+async def get_db() -> AsyncSession:
     """Get database session"""
     async with database.AsyncSessionLocal() as db:
         yield db
@@ -11,16 +12,12 @@ async def get_db():
 
 
 async def get_all_logs(db: AsyncSession, skip: int = 0):
-    result = await db.execute(
-        models.Translator_logs.select().offset(skip)
-    )
+
+    result = await db.execute(select(models.Translator_logs)).offset(skip)
     return result.scalars().all()
 
-async def get_all_by_ip(db: AsyncSession, ip: str):
-    result = await db.execute(
-        models.Translator_logs.select().where(models.Translator_logs.client_ip == ip)
-    )
-    return result.scalars().all()
+async def get_all_by_ip(db: AsyncSession, ip:str):
+    pass
 
 async def get_by_id(db: AsyncSession, id: str):
     result = await db.execute(
@@ -29,13 +26,21 @@ async def get_by_id(db: AsyncSession, id: str):
     return result.scalars().first()
 
 async def create_log(db: AsyncSession, Log: schemas.CreateItemLod):
+    # Get country and city by its ip
+    # country, city = await get_city_country(Log.ip)
+
     db_log = models.Translator_logs(
         client_ip=Log.ip, 
         origin_language=Log.origin_language, 
         language_to_translate=Log.language_to_translate, 
-        origin_text=Log.origin_text,  # Corrected field name here
-        translated_text=Log.translated_text
+        origin_text=Log.origin_text, 
+        translated_text=Log.translated_text,
+        client_country = Log.client_coutry,
+        client_city = Log.client_city,
+        zip_code = Log.client_zip_code,
+        using_phone = Log.using_phone
     )
+    
     db.add(db_log)
     await db.commit()
     await db.refresh(db_log)

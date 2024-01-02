@@ -6,6 +6,10 @@ class ItemBaseLog(BaseModel):
     language_to_translate: Optional[str] = None
     origin_text: Optional[str] = None
     translated_text: Optional[str] = None
+    client_coutry: Optional[str] = None
+    client_city: Optional[str] = None
+    client_zip_code: Optional[str] = None
+    using_phone: Optional[bool] = None
 
 class CreateItemLod(ItemBaseLog):
     ip: str
