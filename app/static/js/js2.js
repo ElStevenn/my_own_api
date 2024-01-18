@@ -143,6 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+// continue this little function
 function switch_languages() {
 
     console.log(document.getElementById('text_translated_text_area')); // Should log the element or null
@@ -168,8 +169,6 @@ function switch_languages() {
     document.getElementById('original_text_area').value = translated_text; // Changed to 'value'
     document.getElementById('text_translated_text_area').value = ""; // Changed to 'value'
 }
-
-
 
 
 function left_button(language) {

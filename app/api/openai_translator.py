@@ -5,7 +5,7 @@ from uuid import uuid4
 from .sql_app import crud, schemas
 import re, aiohttp
 
-api_key = "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"
+api_key = "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"
 
 
 async def remove_main_brackets(text):

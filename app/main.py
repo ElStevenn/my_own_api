@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse, HTMLResponse, FileResponse 
 from fastapi.staticfiles import StaticFiles
 from starlette.websockets import WebSocketState 
-from api import email_sender, openai_translator
+from api import email_sender, openai_translator, schemas
 from pathlib import Path
 from pydantic import BaseModel
 import uvicorn 
@@ -54,10 +54,12 @@ async def translator():
 # @app.get("/api") async def api_projection():
 #    return HTMLResponse("<h1> - under    construction - </h1>")
 
-# @app.post("/send_email") async def 
-# send_an_email(schemas.EmailBasicStructure):
-#     """""" return {"return": "Under 
-#     construction"}
+@app.post("/send_email") 
+async def send_an_email(request_body: schemas.EmailBasicStructure):
+    mess = _email_sender.send_email(request_body.to, request_body.subject, request_body.text)
+
+
+    return {"status": "sucess", "response": str(mess)}
 
 
 @app.get("/get_publicssh") 
@@ -164,6 +166,8 @@ async def translate_text(websocket: WebSocket):
 
 if __name__ == "__main__":
     # uvicorn main:app --host 0.0.0.0 --port 80 
+	# service name: myfastapi.service 
+
     # PostgreSQL file conf -> 
     # /etc/postgresql/14/main/postgresql.conf
     uvicorn.run( "main:app", host = "0.0.0.0", 
