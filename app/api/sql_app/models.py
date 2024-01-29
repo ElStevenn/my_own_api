@@ -15,12 +15,12 @@ class Translator_logs(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     client_ip = Column(String(20), nullable=False)
-    origin_language = Column(String(20))
-    language_to_translate = Column(String(20))
-    origin_text = Column(String(20))
-    translated_text = Column(String(20))
-    client_country = Column(String(20))
-    client_city = Column(String(40))
+    origin_language = Column(String(50))
+    language_to_translate = Column(String(50))
+    origin_text = Column(String)
+    translated_text = Column(String)
+    client_country = Column(String(50))
+    client_city = Column(String(50))
     zip_code = Column(String(15))
     using_phone = Column(Boolean, default=False)
 

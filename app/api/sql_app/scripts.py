@@ -2,7 +2,8 @@ import asyncio
 import aiohttp
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from . import models, crud
+from . import models, crud, database
+
 
 async def get_city_country(ip: str):
     async with aiohttp.ClientSession() as session:
@@ -59,23 +60,36 @@ async def old():
 
 
 
-# Add Zip and using phoene field
+
+############# SCRIPT CLIENT COUNTRY BY ITS IP ###############
 
 
- 
-# async def main():
-#     db_gen = crud.get_db()
-#     db = await db_gen.__anext__()
-#     try:
-#         logs = await update_old_row(db)
-#     finally:
-#         await db_gen.aclose()
+async def get_client_country(ip: str):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f"http://ip-api.com/json/{ip}?fields=country") as con:
+            result = await con.json()
+            return result.get('country', None)
 
+async def get_all_db_data():
+    async with database.async_engine.connect() as conn:
+        query = select(models.Translator_logs.id, models.Translator_logs.client_ip)
 
+        # Execute query
+        result = await conn.execute(query)
+        # Fetching all results
+        result_ = result.fetchall()
 
+        # Convert result in a itrable and string result  
+        data = [(str(row[0]), str(row[1])) for row in result_]
+        return data
+        
 
+async def feth_ip_country():
+    pass
 
+async def main_script():
+    pass
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(get_all_db_data())

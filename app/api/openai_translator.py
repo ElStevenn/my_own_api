@@ -4,8 +4,9 @@ from concurrent.futures import ThreadPoolExecutor
 from uuid import uuid4
 from .sql_app import crud, schemas
 import re, aiohttp
+from .enviroment import env_variable
 
-api_key = "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"
+api_key = env_variable["TRANSLATOR_APIKEY"]
 
 
 async def remove_main_brackets(text):
@@ -22,11 +23,11 @@ async def get_client_data(ip: str):
 
 async def store_data(client_ip, origin_language, language_to_translate, origin_text, translated_text):
     async for db in crud.get_db():
-        # Truncate data to fit into VARCHAR(20)
+        # Get country, zipcode, mobile (if the user is u)
         country, city, zipcode, mobile = await get_client_data(client_ip)
-        country = country[:20] if country else None
-        city = city[:20] if city else None
-        zip_code = zipcode[:20] if city else None
+        country = country[:50] if country else None
+        city = city[:50] if city else None
+        zip_code = zipcode[:50] if city else None
         mobie = mobile if mobile else None
 
         # Create a new log item using the schema
@@ -49,7 +50,7 @@ async def store_data(client_ip, origin_language, language_to_translate, origin_t
     
 
 async def translate_text_with_gpt4(client_ip, text_to_translate, origin_language="English", language_to_translate="Spanish",):
-    openai.api_key = "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"
+    openai.api_key =  env_variable["TRANSLATOR_APIKEY"]
     loop = asyncio.get_event_loop()
     with ThreadPoolExecutor() as pool:
         response = await loop.run_in_executor(
@@ -73,20 +74,10 @@ async def translate_text_with_gpt4(client_ip, text_to_translate, origin_language
         return translated_text
 
 
-
+async def main():
+    ip = "92.189.163.252"
+    country, city, zipcode, mobile  = await get_client_data(ip)
+    print(country);print(city);print(zipcode);print(mobile);
 
 if __name__ == "__main__":
-    text_to_translate = r"""
-    El mejor experto financiero ha empezado a estudiar, investigar y seguir los consejos de verdaderos expertos
-
-    Ha llegado a la conclusión de que #Bitcoin (+150% de subida este año) no le interesa
-
-    Le interesa más comprar Bitcoin Cash o Chainlink jajajajaja
-    Translate post
-        """
-    
-    async def main():
-        return await translate_text_with_gpt4(text_to_translate, origin_language="Spanish", language_to_translate="English")
-
-    translated_text = asyncio.run(main())
-    print(translated_text)
+    asyncio.run(main())

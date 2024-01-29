@@ -4,8 +4,9 @@ from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
 from .models import *
 import asyncio
 from sqlalchemy import MetaData
+from ..enviroment import env_variable
 
-SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://pmateu:mierda69@185.254.206.129:5432/paudatabase"
+SQLALCHEMY_DATABASE_URL = str(env_variable["DATABASE_URL2"])
 # Connection postgresql://<user>:<password>@<host>:<port>/<database_name>
 # Port: 5432
 

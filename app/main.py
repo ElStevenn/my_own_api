@@ -12,7 +12,10 @@ import uvicorn
 import os
 
 
-app = FastAPI( debug=True
+app = FastAPI( 
+	debug=True,
+	docs_url=None,
+	redoc_url=None
 )
     
 class Translater(BaseModel):
@@ -26,10 +29,8 @@ StaticFiles(directory="static"), name="static")
 
 # CORS origins setup (though you're allowing all 
 # origins in the middleware)
-origins = [ "http://localhost", 
-    "http://localhost:8000", "http://127.0.0.1", 
-    "http://127.0.0.1:8000",
-]
+origins = [ "http://localhost", "http://localhost:8000", "http://127.0.0.1", "http://127.0.0.1:8000",]
+
 
 app.add_middleware( CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"])
 
@@ -84,6 +85,10 @@ async def show_iq():
 	path = os.path.join(os.path.dirname(__file__),"files", "8328_certificat.pdf")
 	return FileResponse(path)
 
+@app.get("/aws_cert1")
+async def aws_essentials_cert():
+	path = os.path.join(os.path.dirname(__file__), "files", "pau_AWS_cert1.pdf")
+	return FileResponse(path)
 
 @app.get("/download_pgp_key") 
 async def download_pgp_key():
@@ -106,19 +111,6 @@ async def get_file(filename: str):
 async def send_email():
 	return HTMLResponse("<h1>implement this option</h1>")
 
-# @app.post("/send_email", description="Method 
-# to send an email, this is an intern method") 
-# async def send_body_email(body_request: 
-# schemas.EmailBasicStructure)-> dict:
-#     try: _email_sender.send_email(body_request.to, 
-#         body_request.subject, 
-#         body_request.text or '')
-#     except Exception as e: return 
-#         {"status":"error","response":f"An 
-#         error ocurred {e}"}
-#     return 
-#     {"status":"sucsess","response":"Email has 
-#     been sended succesfully"}
 
 @app.get("/justdeleteme")
 async def deletememe():
@@ -131,6 +123,10 @@ async def emailsender():
 	with open(os.path.join(os.path.dirname(__file__), "front_end", "send_email.html"), 'r') as file:
 		html_content = file.read() 
 	return HTMLResponse(html_content)
+
+@app.get("/future")
+async def future_landing_page():
+	return FileResponse("/home/ubuntu/project_1/PropertyPricePredictor/app/front_end/future_landing_page.html")
 
 
 @app.websocket("/ws_endpoint_translate")
@@ -159,9 +155,6 @@ async def translate_text(websocket: WebSocket):
 			await websocket.close()
 
 
-
-# ----------------------------- Mini functions 
-# -----------------------------------------------------------------
 
 
 if __name__ == "__main__":

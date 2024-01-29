@@ -5,3 +5,5 @@ pandas
 numpy
 aiofiles
 openai==0.28
+passlib
+cryptography
