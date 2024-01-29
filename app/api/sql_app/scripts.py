@@ -61,8 +61,11 @@ async def old():
 
 
 
-############# SCRIPT CLIENT COUNTRY BY ITS IP ###############
-
+################ SCRIPT CLIENT COUNTRY BY ITS IP ##################
+"""
+ *Add Expplanation here*
+ 
+"""
 
 async def get_client_country(ip: str):
     async with aiohttp.ClientSession() as session:
@@ -84,12 +87,40 @@ async def get_all_db_data():
         return data
         
 
-async def feth_ip_country():
-    pass
+async def feth_ip_country(id_, ip):
+    async with AsyncSession(database.async_engine) as session:
+        # Fetch the record you want to update
+        stmt = select(models.Translator_logs).where(models.Translator_logs.id == id_)
+        result = await session.execute(stmt)
+        record = result.scalar_one_or_none()
 
-async def main_script():
-    pass
+        # Update the record if it exists
+        if record:
+            # Fetch country for the given IP
+            country = await get_client_country(ip)
+            if country:
+                record.client_country = country
 
+                # Commit the transaction
+                await session.commit()
+                return "Record updated."
+            else:
+                return "No country found for the given IP."
+        else:
+            return "Record not found."
+
+
+async def main_script_fech_country():
+    all_data = await get_all_db_data()
+
+    # Create a list of tasks for updating each record
+    tasks = []
+    for id_, ip in all_data:
+        task = feth_ip_country(id_, ip)
+        tasks.append(task)
+
+    # Run all tasks concurrently
+    await asyncio.gather(*tasks)
 
 if __name__ == "__main__":
-    asyncio.run(get_all_db_data())
+    asyncio.run(main_script_fech_country())

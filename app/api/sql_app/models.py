@@ -33,7 +33,7 @@ class Translator_logs(Base):
             'language_to_translate': self.language_to_translate,
             'origin_text': self.origin_text,
             'translated_text': self.translated_text,
-            'client_country': self.client_city,
+            'client_country': self.client_country,
             'client_city': self.client_city,
             'client_zip_code': self.zip_code,
             'using_phone': self.using_phone

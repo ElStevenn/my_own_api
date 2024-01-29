@@ -37,7 +37,7 @@ async def store_data(client_ip, origin_language, language_to_translate, origin_t
             language_to_translate=language_to_translate,
             origin_text=origin_text, 
             translated_text=translated_text,
-            client_country=country,
+            client_coutry=country,
             client_city=city,
             client_zip_code=zip_code,
             using_phone=mobie
@@ -70,7 +70,7 @@ async def translate_text_with_gpt4(client_ip, text_to_translate, origin_language
 
         # Store the data into the database
         asyncio.create_task(store_data(client_ip=client_ip, origin_language=origin_language, language_to_translate=language_to_translate, origin_text=text_to_translate, translated_text=translated_text))
-
+        
         return translated_text
 
 
